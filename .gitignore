@@ -1,2 +1,7 @@
+**temp**
+**__pycache__
 .env
+.temp
+archive
 setup.ps1
+logs

@@ -1,8 +1,12 @@
 # Multimodal LLM Agent Risk Assessment
 
+This program is an automated risk assessment framework based on images and text developed by [SNUCEM](https://cem.snu.ac.kr/). 
+Powered by multimodal [LLM agents](https://www.crewai.com/).
+
 ## Credits
 
-- Byunghee Yoo (@pikaybh)
+- Byunghee Yoo ([@pikaybh](https://github.com/pikaybh))
+- Sungwon Ahn
 
 ## License
 
