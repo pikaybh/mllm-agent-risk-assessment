@@ -10,7 +10,7 @@ except:
 import json
 import streamlit as st
 
-from api.registry import get_api_key, API_KEY_REGISTRY
+from api.registry import get_api_key
 from api.models import get_model
 # from crews import assemble
 # from crews.processor import initialize_crew, run_crew
