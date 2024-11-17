@@ -57,8 +57,8 @@ def get_model(model: str, **kwargs) -> object:
     if get_company_name(model) == "opensource":
         raise NotImplementedError(f"{get_company_name(model)} is not supported. (Current model: {model})")
     if get_company_name(model) in COMMERCIAL_MODELS.keys():
-        # if "api_key" in kwargs.keys():
-
+        if "api_key" in kwargs.keys():
+            return LLM(model=model, api_key=kwargs.get("api_key"))
         return LLM(model=model)
     else:
         raise NotImplementedError(f"{get_company_name(model)} is not supported. (Current model: {model})")

@@ -1,4 +1,7 @@
 # api/registry.py
+from api.models import get_company_name
+
+
 API_KEY_REGISTRY = {}
 
 def register_api_key():
@@ -33,4 +36,4 @@ def get_api_key(model_name: str) -> str:
     Returns:
         str: The API key associated with the model, or None if not found.
     """
-    return API_KEY_REGISTRY.get(model_name)
+    return API_KEY_REGISTRY.get(f"{get_company_name(model_name).upper()}_API_KEY")

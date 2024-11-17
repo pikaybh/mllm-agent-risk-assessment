@@ -59,7 +59,6 @@ else:
 
 # 위험성 평가 실행 버튼
 if st.sidebar.button("위험성 평가표 작성하기"):
-    st.error(f"{API_KEY_REGISTRY = }")
     if not task:
         task = placeholder_value
 
