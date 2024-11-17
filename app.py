@@ -79,6 +79,6 @@ if st.sidebar.button("위험성 평가표 작성하기"):
             st.markdown(markdown_table, unsafe_allow_html=True)
         except Exception as e:
             st.error("결과 형식이 올바르지 않습니다.")
-            logger.error(f"{e}: {result}")
+            logger.error(e)
 
     st.success("위험성 평가표 작성이 완료되었습니다!")
