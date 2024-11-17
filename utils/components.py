@@ -42,7 +42,7 @@ def select_model(select_model: str, api_key: str = None) -> None:
         if is_streamlit_running():
             env_api_key = os.getenv(env_key_name)
             if env_api_key:
-                API_KEY_REGISTRY[select_model] = env_api_key
+                API_KEY_REGISTRY[env_key_name] = env_api_key
                 st.sidebar.success("개발자 모드에서는 API 키가 필요 없습니다.")
                 return
 
