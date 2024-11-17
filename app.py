@@ -10,9 +10,12 @@ from crews.crew import run_crew
 from utils.logs import LoggerSetup
 from utils.components import select_model, COMMERCIAL_MODELS
 from utils.functions import get_args, get_image_path, extract_caption, transform_to_json_format_debug_fixed, json_to_md_table  # parse2chart
+from utils.os import fix_trouble
 
 
 logger = LoggerSetup("app").logger
+
+fix_trouble()
 
 TITLE = "위험성평가 자동 생성 LLM"
 # Main Page
