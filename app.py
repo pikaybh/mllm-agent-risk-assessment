@@ -1,4 +1,12 @@
 # app.py
+try:
+    __import__('pysqlite3')
+    import sys
+    sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+except:
+    pass
+
+
 import json
 import streamlit as st
 
@@ -11,19 +19,11 @@ from utils.logs import LoggerSetup
 from utils.components import select_model, COMMERCIAL_MODELS
 from utils.functions import get_args, get_image_path, extract_caption, transform_to_json_format_debug_fixed, json_to_md_table  # parse2chart
 from utils.os import fix_trouble
-import sys
-
-
-try:
-    import pysqlite3
-    sys.modules["sqlite3"] = pysqlite3
-except ImportError:
-    raise RuntimeError("pysqlite3 is required for an updated SQLite version.")
 
 
 logger = LoggerSetup("app").logger
 
-fix_trouble()
+# fix_trouble()
 
 TITLE = "위험성평가 자동 생성 LLM"
 # Main Page
