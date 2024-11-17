@@ -8,7 +8,7 @@ import platform
 import os
 
 def fix_trouble():
-    if platform.system() == "Linux":
+    if "Linux" in str(platform.system()):
         __import__('pysqlite3')
         import sys
         sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
