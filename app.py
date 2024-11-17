@@ -10,7 +10,7 @@ except:
 import json
 import streamlit as st
 
-from api.registry import get_api_key
+from api.registry import get_api_key, API_KEY_REGISTRY
 from api.models import get_model
 # from crews import assemble
 # from crews.processor import initialize_crew, run_crew
@@ -59,6 +59,7 @@ else:
 
 # 위험성 평가 실행 버튼
 if st.sidebar.button("위험성 평가표 작성하기"):
+    st.error(f"{API_KEY_REGISTRY = }")
     if not task:
         task = placeholder_value
 
