@@ -56,6 +56,7 @@ def get_model(model: str, **kwargs) -> object:
         raise NotImplementedError(f"{get_company_name(model)} is not supported. (Current model: {model})")
     if get_company_name(model) in COMMERCIAL_MODELS.keys():
         if "api_key" in kwargs.keys():
+            raise ValueError("hey")
             return LLM(model=model, api_key=kwargs.get("api_key"))
         return LLM(model=model)
     else:
