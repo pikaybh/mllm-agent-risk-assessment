@@ -41,7 +41,7 @@ def get_company_name(model_name: str) -> str:
     raise ValueError(f"No model name {model_name} exists.")
 
 
-def get_model(model: str) -> object:
+def get_model(model: str, **kwargs) -> object:
     """
     Get the mode object named with a given model.
 
@@ -57,6 +57,8 @@ def get_model(model: str) -> object:
     if get_company_name(model) == "opensource":
         raise NotImplementedError(f"{get_company_name(model)} is not supported. (Current model: {model})")
     if get_company_name(model) in COMMERCIAL_MODELS.keys():
+        # if "api_key" in kwargs.keys():
+
         return LLM(model=model)
     else:
         raise NotImplementedError(f"{get_company_name(model)} is not supported. (Current model: {model})")

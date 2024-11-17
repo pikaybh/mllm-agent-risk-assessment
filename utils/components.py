@@ -57,7 +57,7 @@ def select_model(select_model: str, api_key: str = None) -> None:
             f"{company_name} API 키를 입력하세요:", value="", type="password"
         )
         if entered_api_key:
-            API_KEY_REGISTRY[select_model] = entered_api_key
+            API_KEY_REGISTRY[env_key_name] = entered_api_key
             st.sidebar.success("API 키가 성공적으로 등록되었습니다.")
         else:
             st.sidebar.warning("API 키를 입력해주세요.")

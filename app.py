@@ -71,6 +71,7 @@ if st.sidebar.button("위험성 평가표 작성하기"):
         except Exception as e:
             st.error(f"작업 처리 중 오류 발생: {e}")
             logger.error(f"Error: {e}")
+            st.stop()
 
         # 결과 처리
         try:
@@ -80,5 +81,6 @@ if st.sidebar.button("위험성 평가표 작성하기"):
         except Exception as e:
             st.error("결과 형식이 올바르지 않습니다.")
             logger.error(e)
+            st.stop()
 
     st.success("위험성 평가표 작성이 완료되었습니다!")
