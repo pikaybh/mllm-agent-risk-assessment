@@ -66,7 +66,7 @@ if st.sidebar.button("위험성 평가표 작성하기"):
 
     with st.spinner("위험성 평가표를 생성 중, 잠시만 기다려주세요..."):
         try:
-            result = run_crew(get_model(selected_model, api_key), image_path, task)
+            result = run_crew(get_model(selected_model, api_key=api_key), image_path, task)
             st.json(result, expanded=False)
         except Exception as e:
             st.error(f"작업 처리 중 오류 발생: {e}")
