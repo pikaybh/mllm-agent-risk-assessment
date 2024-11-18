@@ -193,6 +193,57 @@ def get_image_path(uploaded_file):
 
 def transform_to_json_format_debug_fixed(raw_text):
     """
+    Transforms the raw text into a JSON format with consistent parsing.
+
+    Args:
+        raw_text (str): Input raw text in the given format.
+
+    Returns:
+        list: JSON-formatted data.
+    """
+    lines = raw_text.strip().splitlines()
+    json_output = []
+    current_entry = {}
+    
+    for line in lines:
+        line = line.strip()
+        
+        # New entry for "위험 요인"
+        if re.match(r"^\d+\.\s\*\*위험 요인\*\*:", line):
+            if current_entry:
+                json_output.append(current_entry)
+                current_entry = {}
+            match = re.match(r"^\d+\.\s\*\*위험 요인\*\*:\s(?P<factor>.+)", line)
+            if match:
+                current_entry["번호"] = len(json_output) + 1
+                current_entry["위험 요인"] = match.group("factor").strip()
+
+        # Parse "위험 등급"
+        elif re.match(r"^\s*-?\s*\*\*위험 등급\*\*:", line):
+            match = re.match(r"^\s*-?\s*\*\*위험 등급\*\*:\s*(?P<grade>\d+)", line)
+            if match:
+                current_entry["위험 등급"] = match.group("grade").strip()
+        
+        # Parse "위험 저감 대책"
+        elif re.match(r"^\s*-?\s*\*\*위험 저감 대책\*\*:", line):
+            match = re.match(r"^\s*-?\s*\*\*위험 저감 대책\*\*:\s*(?P<measures>.+)", line)
+            if match:
+                current_entry["위험 저감 대책"] = match.group("measures").strip()
+            else:
+                # If no new key, append to existing measures
+                if "위험 저감 대책" in current_entry:
+                    current_entry["위험 저감 대책"] += f" {line.strip()}"
+                else:
+                    current_entry["위험 저감 대책"] = line.strip()
+
+    # Add the last entry
+    if current_entry:
+        json_output.append(current_entry)
+
+    return json_output
+    
+    
+    """
     Transforms the A-format risk data to JSON format with debugging.
 
     Args:
