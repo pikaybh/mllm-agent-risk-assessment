@@ -11,9 +11,6 @@ from utils.functions import get_args, get_image_path, is_streamlit_running
 # Load environment variables once
 load_dotenv()
 
-# Initialize API_KEY_REGISTRY in session state if not already present
-init_api_key_registry_session()
-
 def page_config(title: str):
     st.set_page_config(
         page_title=title,
@@ -101,6 +98,9 @@ def select_model(select_model: str, api_key: str = None) -> None:
     Returns:
         None
     """
+    # Initialize API_KEY_REGISTRY in session state if not already present
+    init_api_key_registry_session()
+
     # Handle open-source models
     if select_model in COMMERCIAL_MODELS["opensource"]:
         st.sidebar.info("기본 모델은 OO를 기반으로 XX 데이터를 학습시킨 모델입니다.")
