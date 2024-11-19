@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 from api.registry import register_api_key, get_api_key, init_api_key_registry_session, USER_CREDENTIALS
 from api.models import COMMERCIAL_MODELS, get_company_name
-from utils.functions import get_args, get_image_path
+from utils.functions import get_args, get_image_path, is_streamlit_running
 
 # Load environment variables once
 load_dotenv()
