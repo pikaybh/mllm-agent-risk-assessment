@@ -6,11 +6,10 @@ from dotenv import load_dotenv
 
 from api.registry import register_api_key, get_api_key, init_api_key_registry_session, USER_CREDENTIALS
 from api.models import COMMERCIAL_MODELS, get_company_name
-from utils.functions import get_args, get_image_path, is_streamlit_running
+from utils.functions import get_args, get_image_path
 
 # Load environment variables once
-if is_streamlit_running():
-    load_dotenv()
+load_dotenv()
 
 # Initialize API_KEY_REGISTRY in session state if not already present
 init_api_key_registry_session()
