@@ -1,7 +1,8 @@
 **temp**
 **__pycache__
 .env
+secrets.toml
 .temp
 archive
-setup.ps1
+**.ps1
 logs

@@ -87,6 +87,59 @@ def json_to_md_table(data):
 
     return table
 
+
+def json_to_html_table(data):
+    """
+    Converts a JSON-like list of dictionaries into an HTML table.
+
+    Args:
+        data (list): A list of dictionaries containing keys like "번호", "위험 요인", "위험 등급", and "위험 저감 대책".
+
+    Returns:
+        str: A string containing the HTML table.
+    """
+    num = "번호"
+    precursor = "위험 요인"
+    matrix = "위험 등급"
+    todo = "위험 저감 대책"
+
+    # Start the table
+    html_table = """
+    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+        <thead>
+            <tr>
+                <th style="border: 1px solid #ccc; padding: 10px; text-align: center; background-color: #d8e4fc; color: #244180; width: 60px">번호</th>
+                <th style="border: 1px solid #ccc; padding: 10px; text-align: center; background-color: #d8e4fc; color: #244180; width: 120px"">위험 요인</th>
+                <th style="border: 1px solid #ccc; padding: 10px; text-align: center; background-color: #d8e4fc; color: #244180; width: 100px"">위험 등급</th>
+                <th style="border: 1px solid #ccc; padding: 10px; text-align: center; background-color: #d8e4fc; color: #244180;">위험 저감 대책</th>
+            </tr>
+        </thead>
+        <tbody>
+    """
+
+    # Add table rows
+    for item in data:
+        measures = item.get(todo, '').replace(" -", "<br>•").replace("- ", "• ")
+        if measures.startswith("<br>"):
+            measures = measures[4:]  # Remove leading <br> if present
+        html_table += f"""
+            <tr>
+                <td style="border: 1px solid #ccc; padding: 10px; text-align: center; background-color: #f5f5f5"><b>{item.get(num, '')}</b></td>
+                <td style="border: 1px solid #ccc; padding: 10px; text-align: center;">{item.get(precursor, '')}</td>
+                <td style="border: 1px solid #ccc; padding: 10px; text-align: center;">{item.get(matrix, '')}</td>
+                <td style="border: 1px solid #ccc; padding: 10px; text-align: center;">{measures}</td>
+            </tr>
+        """
+
+    # Close the table
+    html_table += """
+        </tbody>
+    </table>
+    """
+
+    return html_table
+
+
 """
 def parse2chart(text):
     # CrewOutput을 문자열로 변환
@@ -192,6 +245,69 @@ def get_image_path(uploaded_file):
 
 
 def transform_to_json_format_debug_fixed(raw_text):
+    """
+    Transforms the raw text into a JSON format with consistent parsing.
+
+    Args:
+        raw_text (str): Input raw text in the given format.
+
+    Returns:
+        list: JSON-formatted data.
+    """
+    lines = raw_text.strip().splitlines()
+    json_output = []
+    current_entry = {}
+    capturing_measures = False  # Flag to handle multi-line "위험 저감 대책"
+
+    for line in lines:
+        line = line.strip()
+
+        # New entry for "위험 요인"
+        if re.match(r"^\d+\.\s\*\*위험 요인\*\*:", line):
+            if current_entry:
+                json_output.append(current_entry)
+                current_entry = {}
+            capturing_measures = False
+            match = re.match(r"^\d+\.\s\*\*위험 요인\*\*:\s(?P<factor>.+)", line)
+            if match:
+                current_entry["번호"] = len(json_output) + 1
+                current_entry["위험 요인"] = match.group("factor").strip()
+
+        # Parse "위험 등급"
+        elif re.match(r"^\s*-?\s*\*\*위험 등급\*\*:", line):
+            capturing_measures = False
+            match = re.match(r"^\s*-?\s*\*\*위험 등급\*\*:\s*(?P<grade>\d+)", line)
+            if match:
+                current_entry["위험 등급"] = match.group("grade").strip()
+
+        # Parse "위험 저감 대책"
+        elif re.match(r"^\s*-?\s*\*\*위험 저감 대책\*\*:", line):
+            capturing_measures = True
+            match = re.match(r"^\s*-?\s*\*\*위험 저감 대책\*\*:\s*(?P<measures>.+)", line)
+            if match:
+                current_entry["위험 저감 대책"] = match.group("measures").strip()
+            else:
+                current_entry["위험 저감 대책"] = ""
+
+        # Handle additional lines for "위험 저감 대책"
+        elif capturing_measures:
+            # Continue capturing measures for multi-line entries
+            if "위험 저감 대책" in current_entry:
+                current_entry["위험 저감 대책"] += f" {line.strip()}"
+            else:
+                current_entry["위험 저감 대책"] = line.strip()
+
+    # Add the last entry
+    if current_entry:
+        json_output.append(current_entry)
+
+    return json_output
+
+
+
+
+
+
     """
     Transforms the raw text into a JSON format with consistent parsing.
 
