@@ -9,7 +9,8 @@ from api.models import COMMERCIAL_MODELS, get_company_name
 from utils.functions import get_args, get_image_path, is_streamlit_running
 
 # Load environment variables once
-load_dotenv()
+if is_streamlit_running():
+    load_dotenv()
 
 # Initialize API_KEY_REGISTRY in session state if not already present
 if "API_KEY_REGISTRY" not in st.session_state:
