@@ -139,10 +139,11 @@ def select_model(select_model: str, api_key: str = None) -> None:
                 return
 
         # 3. Check for the API key in the registry
-        registered_api_key = st.session_state["API_KEY_REGISTRY"].get(env_key_name)
-        if registered_api_key:
-            st.sidebar.success("등록된 API 키가 사용됩니다.")
-            return
+        if env_key_name in st.session_state["API_KEY_REGISTRY"]:
+            registered_api_key = st.session_state["API_KEY_REGISTRY"].get(env_key_name)
+            if registered_api_key:
+                st.sidebar.success("등록된 API 키가 사용됩니다.")
+                return
 
         # 4. Prompt user for a new API key
         entered_api_key = st.sidebar.text_input(
