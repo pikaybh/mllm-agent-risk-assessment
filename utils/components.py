@@ -4,7 +4,7 @@ import os
 import streamlit as st
 from dotenv import load_dotenv
 
-from api.registry import register_api_key, get_api_key, USER_CREDENTIALS
+from api.registry import register_api_key, get_api_key, init_api_key_registry_session, USER_CREDENTIALS
 from api.models import COMMERCIAL_MODELS, get_company_name
 from utils.functions import get_args, get_image_path, is_streamlit_running
 
@@ -13,8 +13,7 @@ if is_streamlit_running():
     load_dotenv()
 
 # Initialize API_KEY_REGISTRY in session state if not already present
-if "API_KEY_REGISTRY" not in st.session_state:
-    st.session_state["API_KEY_REGISTRY"] = {}
+init_api_key_registry_session()
 
 def page_config(title: str):
     st.set_page_config(

@@ -7,9 +7,10 @@ USER_CREDENTIALS = st.secrets["credentials"]
 OPENAI_API_KEY = st.secrets["api_keys"]["OPENAI_API_KEY"]
 ANTHROPIC_API_KEY = st.secrets["api_keys"]["ANTHROPIC_API_KEY"]
 
-# Initialize API_KEY_REGISTRY in session state if not already present
-if "API_KEY_REGISTRY" not in st.session_state:
-    st.session_state["API_KEY_REGISTRY"] = {}
+def init_api_key_registry_session():
+    # Initialize API_KEY_REGISTRY in session state if not already present
+    if "API_KEY_REGISTRY" not in st.session_state:
+        st.session_state["API_KEY_REGISTRY"] = {}
 
 def register_api_key():
     """
