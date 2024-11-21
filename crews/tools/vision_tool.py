@@ -4,10 +4,9 @@ from typing import Type
 import requests
 from openai import OpenAI
 from pydantic import BaseModel
-
 from crewai_tools.tools.base_tool import BaseTool
 
-from utils.crews import set_openapi_api_key_for_vision_tool
+from utils.crews import set_openai_api_key_for_vision_tool
 
 
 
@@ -79,7 +78,7 @@ class VisionTool(BaseTool):
         return response.json()["choices"][0]["message"]["content"]
 
     def _run(self, **kwargs) -> str:
-        client = OpenAI(api_key=set_openapi_api_key_for_vision_tool())
+        client = OpenAI(api_key=set_openai_api_key_for_vision_tool())
 
         image_path_url = kwargs.get("image_path_url")
 

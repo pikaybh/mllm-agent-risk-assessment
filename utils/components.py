@@ -28,7 +28,6 @@ def page_config(title: str):
 def image_handler(description: str):
     image_placeholder = st.empty()
     image_file = st.sidebar.file_uploader(description, type=["jpg", "jpeg", "png"])
-    logger.info(image_file)
 
     if image_file:
         image_path = get_image_path(image_file)  # 업로드된 파일을 임시 경로에 저장

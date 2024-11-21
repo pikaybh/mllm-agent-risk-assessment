@@ -36,7 +36,7 @@ def get_company_name(model_name: str) -> str:
     for company, models in COMMERCIAL_MODELS.items():
         if model_name in models:
             return company
-    raise ValueError(f"No model name {model_name} exists.")
+    raise ValueError(f"No model name {model_name} exists")
 
 
 def get_model(model: str, **kwargs) -> object:
