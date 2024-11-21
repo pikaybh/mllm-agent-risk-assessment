@@ -1,10 +1,9 @@
 # crews/crew.py
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
-from crewai_tools import (VisionTool,
-                          WebsiteSearchTool)
+from crewai_tools import WebsiteSearchTool
 
-from api.registry import OPENAI_API_KEY
+from crews.tools.vision_tool import VisionTool
 
 
 
@@ -39,7 +38,7 @@ class RiskAssessmentCrew():
         """
         return Agent(
             config=self.agents_config['integrated_risk_detector'],
-            tools=[VisionTool(api_key=OPENAI_API_KEY)],
+            tools=[VisionTool()],
             verbose=True
         )
 

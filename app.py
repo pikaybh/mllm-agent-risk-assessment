@@ -1,8 +1,6 @@
 # app.py
 import master
 
-import os
-
 import json
 import streamlit as st
 
@@ -40,11 +38,6 @@ api_key = get_api_key(model_name=selected_model)
 st.sidebar.subheader("작업 입력")
 image_path = image_handler("이미지를 업로드하세요:")
 task = task_handler("작업을 입력하세요:", "빔 거푸집 설치 작업")
-
-logger.debug(f"Image Path Provided: {image_path}")
-if not os.path.exists(image_path):
-    logger.error(f"Image path does not exist: {image_path}")
-    raise FileNotFoundError(f"The provided image path does not exist: {image_path}")
 
 # 위험성 평가 실행 버튼
 if st.sidebar.button("위험성 평가표 작성하기"):

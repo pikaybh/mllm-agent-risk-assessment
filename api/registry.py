@@ -12,6 +12,7 @@ def init_api_key_registry_session():
     if "API_KEY_REGISTRY" not in st.session_state:
         st.session_state["API_KEY_REGISTRY"] = {}
 
+
 def register_api_key():
     """
     Decorator to register a model and associate an API key in the session state.
