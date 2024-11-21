@@ -1,6 +1,9 @@
 # api/registry.py
-from api.models import get_company_name
+from functools import wraps
+
 import streamlit as st
+
+from api.models import get_company_name
 
 
 USER_CREDENTIALS = st.secrets["credentials"]
@@ -21,6 +24,7 @@ def register_api_key():
         Callable: The wrapped function.
     """
     def decorator(func):
+        @wraps(func)  # Preserve the metadata of the original function
         def wrapper(*args, **kwargs):
             # Extract model name and API key from arguments
             api_key = kwargs.get("api_key")
@@ -28,7 +32,7 @@ def register_api_key():
 
             # Register the API key in session state if provided
             if api_key and select_model:
-                st.session_state["API_KEY_REGISTRY"][select_model] = api_key
+                st.session_state["API_KEY_REGISTRY"][get_api_name_from_model_name(select_model)] = api_key
 
             # Proceed with the original function
             return func(*args, **kwargs)
@@ -47,4 +51,8 @@ def get_api_key(model_name: str) -> str:
         str: The API key associated with the model, or None if not found.
     """
     registry = st.session_state.get("API_KEY_REGISTRY", {})
-    return registry.get(f"{get_company_name(model_name).upper()}_API_KEY")
+    return registry.get(get_api_name_from_model_name(model_name))
+
+
+def get_api_name_from_model_name(model_name: str) -> str:
+    return f"{get_company_name(model_name).upper()}_API_KEY"

@@ -1,6 +1,4 @@
 # api/models.py
-from functools import wraps
-
 import streamlit as st
 from crewai import LLM
 
