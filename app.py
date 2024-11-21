@@ -32,10 +32,10 @@ login()
 st.sidebar.subheader("모델 선택")
 model_options = get_args(**COMMERCIAL_MODELS)
 selected_model = st.sidebar.selectbox("모델을 선택하세요:", model_options, help="Notice: 성능이 상대적으로 좋지 않은 모델은 렌더링 오류를 유발할 수 있습니다.")
-select_model(select_model=selected_model)
 
 # Retrieve the API key
 api_key = get_api_key(model_name=selected_model)
+select_model(select_model=selected_model, api_key=api_key)
 
 # Sidebar: Task Input
 st.sidebar.subheader("작업 입력")
@@ -48,7 +48,7 @@ if st.sidebar.button("위험성 평가표 작성하기"):
     with st.spinner("위험성 평가표를 생성 중, 잠시만 기다려주세요. (예상 소요 시간: 1~3분)"):
         # Run crews
         try:
-            result = run_crew(get_model(selected_model, api_key=api_key), image_path, task)
+            result = run_crew(get_model(selected_model), image_path, task)
         except Exception as e:
             st.error(f"작업 처리 중 오류 발생: {e}")
             logger.error(f"Error: {e}")
