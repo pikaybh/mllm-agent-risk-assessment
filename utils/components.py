@@ -7,9 +7,14 @@ from dotenv import load_dotenv
 from api.registry import register_api_key, get_api_key, init_api_key_registry_session, USER_CREDENTIALS
 from api.models import COMMERCIAL_MODELS, get_company_name
 from utils.functions import get_args, get_image_path, is_streamlit_running
+from utils.logs import LoggerSetup
+
 
 # Load environment variables once
 load_dotenv()
+
+# Set logger for debugging
+logger = LoggerSetup("utils.components").logger
 
 def page_config(title: str):
     st.set_page_config(
@@ -23,6 +28,7 @@ def page_config(title: str):
 def image_handler(description: str):
     image_placeholder = st.empty()
     image_file = st.sidebar.file_uploader(description, type=["jpg", "jpeg", "png"])
+    logger.info(image_file)
 
     if image_file:
         image_path = get_image_path(image_file)  # 업로드된 파일을 임시 경로에 저장

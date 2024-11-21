@@ -1,6 +1,7 @@
 # utils/functions.py
 import re
 import tempfile
+from deprecated import deprecated
 
 import json
 from typing import Any, List
@@ -38,7 +39,8 @@ def extract_caption(image_path):
     except Exception as e:
         return None
 
-"""
+
+@deprecated(version='1.1.1', reason="Error prune.")
 def parse_data(text: str):
     # 숫자. 으로 시작하는 항목 구분, **제목**: 내용을 구조적으로 파싱
     pattern = r"(?P<number>\d+)\.\s+\*\*(?P<section>.+?)\*\*:\s+(?P<content>.+?)(?=\n\d+\.\s+\*\*|$)"
@@ -70,7 +72,8 @@ def parse_data(text: str):
 
     return results
 
-"""
+
+@deprecated(version='1.1.1', reason="No need MD. Need HTML for style.")
 def json_to_md_table(data):
     num = "번호"
     precursor = "위험 요인"
@@ -140,7 +143,7 @@ def json_to_html_table(data):
     return html_table
 
 
-"""
+@deprecated(version='1.1.1', reason="Error prune.")
 def parse2chart(text):
     # CrewOutput을 문자열로 변환
     if not isinstance(text, (str, bytes)):
@@ -154,10 +157,9 @@ def parse2chart(text):
     
     # Markdown 표로 변환
     return json_to_md_table(parsed_data)
-"""
 
 
-'''
+@deprecated(version='1.1.1', reason="Error prune.")
 def raw_to_md_table_fixed(raw_text):
     """
     Parses risk data and ensures all multi-line sections are properly processed.
@@ -232,7 +234,6 @@ def raw_to_md_table_fixed(raw_text):
         md_table += f"| {entry['index']} | {entry['risk_factor']} | {entry['risk_rating']} | {risk_measures} |\n"
 
     return md_table, debug_log
-'''
 
 
 def get_image_path(uploaded_file):
@@ -298,117 +299,6 @@ def transform_to_json_format_debug_fixed(raw_text):
                 current_entry["위험 저감 대책"] = line.strip()
 
     # Add the last entry
-    if current_entry:
-        json_output.append(current_entry)
-
-    return json_output
-
-
-
-
-
-
-    """
-    Transforms the raw text into a JSON format with consistent parsing.
-
-    Args:
-        raw_text (str): Input raw text in the given format.
-
-    Returns:
-        list: JSON-formatted data.
-    """
-    lines = raw_text.strip().splitlines()
-    json_output = []
-    current_entry = {}
-    
-    for line in lines:
-        line = line.strip()
-        
-        # New entry for "위험 요인"
-        if re.match(r"^\d+\.\s\*\*위험 요인\*\*:", line):
-            if current_entry:
-                json_output.append(current_entry)
-                current_entry = {}
-            match = re.match(r"^\d+\.\s\*\*위험 요인\*\*:\s(?P<factor>.+)", line)
-            if match:
-                current_entry["번호"] = len(json_output) + 1
-                current_entry["위험 요인"] = match.group("factor").strip()
-
-        # Parse "위험 등급"
-        elif re.match(r"^\s*-?\s*\*\*위험 등급\*\*:", line):
-            match = re.match(r"^\s*-?\s*\*\*위험 등급\*\*:\s*(?P<grade>\d+)", line)
-            if match:
-                current_entry["위험 등급"] = match.group("grade").strip()
-        
-        # Parse "위험 저감 대책"
-        elif re.match(r"^\s*-?\s*\*\*위험 저감 대책\*\*:", line):
-            match = re.match(r"^\s*-?\s*\*\*위험 저감 대책\*\*:\s*(?P<measures>.+)", line)
-            if match:
-                current_entry["위험 저감 대책"] = match.group("measures").strip()
-            else:
-                # If no new key, append to existing measures
-                if "위험 저감 대책" in current_entry:
-                    current_entry["위험 저감 대책"] += f" {line.strip()}"
-                else:
-                    current_entry["위험 저감 대책"] = line.strip()
-
-    # Add the last entry
-    if current_entry:
-        json_output.append(current_entry)
-
-    return json_output
-    
-    
-    """
-    Transforms the A-format risk data to JSON format with debugging.
-
-    Args:
-        raw_text (str): Input raw text in A format.
-
-    Returns:
-        list: JSON-formatted risk data with all values as strings.
-    """
-    lines = raw_text.strip().splitlines()
-    json_output = []
-    current_entry = {}
-    index = None
-
-    for line in lines:
-        line = line.strip()
-
-        # Detect a new risk factor entry
-        if re.match(r"^\d+\.\s\*\*위험 요인\*\*:", line):
-            if current_entry:
-                # Add completed entry to the output
-                json_output.append(current_entry)
-                current_entry = {}
-
-            # Extract risk factor and start a new entry
-            match = re.match(r"^(?P<index>\d+)\.\s\*\*위험 요인\*\*:\s(?P<risk_factor>.*)", line)
-            if match:
-                index = match.group("index")
-                current_entry = {
-                    "번호": index,
-                    "위험 요인": match.group("risk_factor").strip(),
-                    "위험 저감 대책": ""
-                }
-
-        # Extract the risk level
-        elif re.match(r"^\*\*위험 등급\*\*:", line):
-            match = re.match(r"^\*\*위험 등급\*\*:\s(?P<risk_rating>\d+)", line)
-            if match:
-                current_entry["위험 등급"] = match.group("risk_rating").strip()
-
-        # Extract or append the risk mitigation measures
-        elif re.match(r"^\*\*위험 저감 대책\*\*:", line) or "위험 저감 대책" in current_entry:
-            if re.match(r"^\*\*위험 저감 대책\*\*:", line):
-                # Start a new risk mitigation section
-                current_entry["위험 저감 대책"] = line.split("**위험 저감 대책**:")[1].strip()
-            else:
-                # Append to an existing mitigation section
-                current_entry["위험 저감 대책"] += f" {line.strip()}"
-
-    # Finalize the last entry
     if current_entry:
         json_output.append(current_entry)
 

@@ -1,6 +1,8 @@
 # app.py
 import master
 
+import os
+
 import json
 import streamlit as st
 
@@ -16,6 +18,7 @@ from utils.components import (page_config,
 from utils.functions import get_args, extract_caption, transform_to_json_format_debug_fixed, json_to_md_table, json_to_html_table
 
 
+# Set logger
 logger = LoggerSetup("app").logger
 
 # Main Page
@@ -38,23 +41,30 @@ st.sidebar.subheader("작업 입력")
 image_path = image_handler("이미지를 업로드하세요:")
 task = task_handler("작업을 입력하세요:", "빔 거푸집 설치 작업")
 
+logger.debug(f"Image Path Provided: {image_path}")
+if not os.path.exists(image_path):
+    logger.error(f"Image path does not exist: {image_path}")
+    raise FileNotFoundError(f"The provided image path does not exist: {image_path}")
+
 # 위험성 평가 실행 버튼
 if st.sidebar.button("위험성 평가표 작성하기"):
-    logger.debug(f"작업 실행 시작: {task}")
+    logger.debug(f"Running in progress. Task: {task}")
     with st.spinner("위험성 평가표를 생성 중, 잠시만 기다려주세요. (예상 소요 시간: 1~3분)"):
+        # Run crews
         try:
             result = run_crew(get_model(selected_model, api_key=api_key), image_path, task)
         except Exception as e:
             st.error(f"작업 처리 중 오류 발생: {e}")
             logger.error(f"Error: {e}")
             st.stop()
+        finally:
+            if image_path:
+                os.unlink(image_path)  # 임시 파일 삭제
 
         # 결과 처리
         try:
             st.markdown(f"### 평가대상작업: {task}")
             json_format_output = transform_to_json_format_debug_fixed(result.raw)
-            # markdown_table = json_to_md_table(json_format_output)
-            # st.markdown(markdown_table, unsafe_allow_html=True)
             table = json_to_html_table(json_format_output)
             st.html(table)
         except Exception as e:
@@ -64,4 +74,4 @@ if st.sidebar.button("위험성 평가표 작성하기"):
 
     st.markdown("### 펼쳐서 Raw 데이터 보기 👇")
     st.json(result, expanded=False)
-    # st.success("위험성 평가표 작성이 완료되었습니다.")
+    st.success("위험성 평가표 작성이 완료되었습니다.")

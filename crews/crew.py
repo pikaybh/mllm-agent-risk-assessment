@@ -1,6 +1,10 @@
+# crews/crew.py
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
-from crewai_tools import VisionTool
+from crewai_tools import (VisionTool,
+                          WebsiteSearchTool)
+
+from api.registry import OPENAI_API_KEY
 
 
 
@@ -35,8 +39,8 @@ class RiskAssessmentCrew():
         """
         return Agent(
             config=self.agents_config['integrated_risk_detector'],
-            verbose=True,
-            tools=[VisionTool()]
+            tools=[VisionTool(api_key=OPENAI_API_KEY)],
+            verbose=True
         )
 
     @agent
@@ -57,6 +61,7 @@ class RiskAssessmentCrew():
         """
         return Agent(
             config=self.agents_config['risk_assessment_expert'],
+            tools=[WebsiteSearchTool()],
             verbose=True
         )
 
@@ -78,6 +83,7 @@ class RiskAssessmentCrew():
         """
         return Agent(
             config=self.agents_config['risk_reduction_expert'],
+            tools=[WebsiteSearchTool()],
             verbose=True
         )
 
@@ -95,6 +101,7 @@ class RiskAssessmentCrew():
         """
         return Task(
             config=self.tasks_config['integrated_risk_detection'],
+            agent=self.integrated_risk_detector()
         )
 
     @task
@@ -111,6 +118,7 @@ class RiskAssessmentCrew():
         """
         return Task(
             config=self.tasks_config['risk_assessment'],
+            agent=self.risk_assessment_expert()
         )
 
     @task
@@ -127,6 +135,7 @@ class RiskAssessmentCrew():
         """
         return Task(
             config=self.tasks_config['risk_reduction'],
+            agent=self.risk_reduction_expert()
         )
 
     @crew
@@ -147,6 +156,7 @@ class RiskAssessmentCrew():
             process=Process.hierarchical,
             manager_llm=model,
             verbose=True,
+            planning=True
         )
 
 
@@ -163,9 +173,7 @@ def run_crew(model, image, tasks):
     Returns:
         Output from the kickoff process of the RiskAssessmentCrew.
     """
-    inputs = {
+    return RiskAssessmentCrew().crew(model=model).kickoff(inputs={
         'image': image,
         'tasks': tasks
-    }
-    risk_assessment = RiskAssessmentCrew()
-    return risk_assessment.crew(model=model).kickoff(inputs=inputs)
+    })
