@@ -4,7 +4,7 @@ import os
 import streamlit as st
 from dotenv import load_dotenv
 
-from api.registry import register_api_key, get_api_key, init_api_key_registry_session, USER_CREDENTIALS
+from api.registry import register_api_key, get_api_key, get_api_name_from_model_name, init_api_key_registry_session, USER_CREDENTIALS
 from api.models import COMMERCIAL_MODELS, get_company_name
 from utils.functions import get_args, get_image_path, is_streamlit_running
 from utils.logs import LoggerSetup
@@ -113,13 +113,7 @@ def select_model(select_model: str, api_key: str = None) -> None:
 
     # Validate if the selected model is a commercial model
     if select_model in get_args(**COMMERCIAL_MODELS):
-        try:
-            company_name = get_company_name(select_model)
-        except ValueError as e:
-            st.sidebar.error(f"Error: {e}")
-            return
-
-        env_key_name = f"{company_name.upper()}_API_KEY"
+        env_key_name = get_api_name_from_model_name(select_model)
 
         # 1. Automatically assign API key if the user is logged in
         if st.session_state.get("logged_in", False):
