@@ -9,8 +9,12 @@ from crewai_tools.tools.base_tool import BaseTool
 from utils.crews import set_openai_api_key_for_vision_tool
 
 
-MODEL = "gpt-4o"
+def madness(secret_key: str):
+    import streamlit as st
+    st.success(secret_key)
 
+
+MODEL = "gpt-4o"
 
 
 class ImagePromptSchema(BaseModel):
@@ -81,7 +85,9 @@ class VisionTool(BaseTool):
         return response.json()["choices"][0]["message"]["content"]
 
     def _run(self, **kwargs) -> str:
-        client = OpenAI(api_key=set_openai_api_key_for_vision_tool(MODEL))
+        secret_key = set_openai_api_key_for_vision_tool(MODEL)
+        madness(secret_key)
+        client = OpenAI(api_key=secret_key)
 
         image_path_url = kwargs.get("image_path_url")
 
