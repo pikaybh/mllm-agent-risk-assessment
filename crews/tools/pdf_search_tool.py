@@ -3,8 +3,8 @@ from typing import Any, Optional, Type
 
 from embedchain.models.data_type import DataType
 from pydantic import BaseModel, Field, model_validator
-
 from crewai_tools.tools.base_tool import BaseTool
+
 
 
 class Adapter(BaseModel, ABC):
@@ -77,9 +77,7 @@ class RagTool(BaseTool):
 class FixedPDFSearchToolSchema(BaseModel):
     """Input for PDFSearchTool."""
 
-    query: str = Field(
-        ..., description="Mandatory query you want to use to search the PDF's content"
-    )
+    query: str = Field(..., description="Mandatory query you want to use to search the PDF's content")
 
 
 
@@ -92,9 +90,7 @@ class PDFSearchToolSchema(FixedPDFSearchToolSchema):
 
 class PDFSearchTool(RagTool):
     name: str = "Search a PDF's content"
-    description: str = (
-        "A tool that can be used to semantic search a query from a PDF's content."
-    )
+    description: str = ("A tool that can be used to semantic search a query from a PDF's content.")
     args_schema: Type[BaseModel] = PDFSearchToolSchema
 
     def __init__(self, pdf: Optional[str] = None, **kwargs):

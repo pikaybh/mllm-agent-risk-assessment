@@ -68,6 +68,8 @@ if st.sidebar.button("위험성 평가표 작성하기"):
             logger.error(e)
             st.stop()
 
+    st.markdown(f"<details><summary><h3>펼쳐서 Agent 생각 보기 👇</h3></summary>{"\n".join(result.tasks_output)}</details>", unsafe_allow_html=True)
+    st.json(result.tasks_output, expanded=False)
     st.markdown("### 펼쳐서 Raw 데이터 보기 👇")
     st.json(result, expanded=False)
     st.success("위험성 평가표 작성이 완료되었습니다.")
