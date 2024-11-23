@@ -6,7 +6,7 @@ from crewai.project import CrewBase, agent, crew, task
 # from crewai_tools import PDFSearchTool
 
 from crews.tools.vision_tool import VisionTool
-from crews.tools.vision_tool import VPDFSearchTool
+from crews.tools.vision_tool import PDFSearchTool
 
 
 위험성평가_이행점검_매뉴얼 = "src/pdfs/붙임1._2022_위험성평가_이행점검_매뉴얼.pdf"
