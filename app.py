@@ -40,7 +40,7 @@ select_model(select_model=selected_model)
 # Sidebar: Task Input
 st.sidebar.subheader("작업 입력")
 image_path = image_handler("이미지를 업로드하세요:")
-task = task_handler("작업을 입력하세요:", "빔 거푸집 설치 작업")
+task = task_handler("작업을 입력하세요:", "공종: 빔 거푸집 설치 작업, 공정: 자재 인양")
 
 # 위험성 평가 실행 버튼
 if st.sidebar.button("위험성 평가표 작성하기"):
@@ -53,9 +53,6 @@ if st.sidebar.button("위험성 평가표 작성하기"):
             st.error(f"작업 처리 중 오류 발생: {e}")
             logger.error(f"Error: {e}")
             st.stop()
-        finally:
-            if image_path:
-                os.unlink(image_path)  # 임시 파일 삭제
 
         # 결과 처리
         try:

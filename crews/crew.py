@@ -1,9 +1,14 @@
 # crews/crew.py
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
-from crewai_tools import WebsiteSearchTool
+from crewai_tools import PDFSearchTool
 
 from crews.tools.vision_tool import VisionTool
+
+
+위험성평가_이행점검_매뉴얼 = "src/pdfs/붙임1._2022_위험성평가_이행점검_매뉴얼.pdf"
+위험성평가에_관한_지침 = "src/pdfs/사업장 위험성평가에 관한 지침(고용노동부고시)(제2023-19호)(20230522).pdf"
+산업안전보건기준에_관한_규칙 = "src/pdfs/산업안전보건기준에 관한 규칙(고용노동부령)(제00417호)(20240628).pdf"
 
 
 
@@ -60,7 +65,11 @@ class RiskAssessmentCrew():
         """
         return Agent(
             config=self.agents_config['risk_assessment_expert'],
-            tools=[WebsiteSearchTool()],
+            tools=[
+                PDFSearchTool(pdf=위험성평가_이행점검_매뉴얼),
+                PDFSearchTool(pdf=위험성평가에_관한_지침),
+                PDFSearchTool(pdf=산업안전보건기준에_관한_규칙)
+            ],
             verbose=True
         )
 
@@ -82,7 +91,11 @@ class RiskAssessmentCrew():
         """
         return Agent(
             config=self.agents_config['risk_reduction_expert'],
-            tools=[WebsiteSearchTool()],
+            tools=[
+                PDFSearchTool(pdf=위험성평가_이행점검_매뉴얼),
+                PDFSearchTool(pdf=위험성평가에_관한_지침),
+                PDFSearchTool(pdf=산업안전보건기준에_관한_규칙)
+            ],
             verbose=True
         )
 
@@ -172,7 +185,7 @@ def run_crew(model, image, tasks):
     Returns:
         Output from the kickoff process of the RiskAssessmentCrew.
     """
-    return RiskAssessmentCrew().crew(model=model).kickoff(inputs={
+    return RiskAssessmentCrew().crew(model).kickoff(inputs={
         'image': image,
         'tasks': tasks
     })
