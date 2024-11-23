@@ -3,21 +3,15 @@ import os
 
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
-from crewai_tools import PDFSearchTool
+# from crewai_tools import PDFSearchTool
 
-# from crews.tools.vision_tool import VisionTool
-from crewai_tools import VisionTool
-
-
-from utils.crews import set_openai_api_key_for_vision_tool
+from crews.tools.vision_tool import VisionTool
+from crews.tools.vision_tool import VPDFSearchTool
 
 
 위험성평가_이행점검_매뉴얼 = "src/pdfs/붙임1._2022_위험성평가_이행점검_매뉴얼.pdf"
 위험성평가에_관한_지침 = "src/pdfs/사업장 위험성평가에 관한 지침(고용노동부고시)(제2023-19호)(20230522).pdf"
 산업안전보건기준에_관한_규칙 = "src/pdfs/산업안전보건기준에 관한 규칙(고용노동부령)(제00417호)(20240628).pdf"
-TOOL_MODEL = "gpt-4o"
-
-os.environ["OPENAI_API_KEY"] = set_openai_api_key_for_vision_tool(TOOL_MODEL)
 
 
 
