@@ -49,9 +49,9 @@ class RiskAssessmentCrew():
             config=self.agents_config['integrated_risk_detector'],
             tools=[
                 VisionTool(
-                    config={
-                        api_key: set_openai_api_key_for_vision_tool(MODEL)
-                    }
+                    config=dict(
+                        api_key=set_openai_api_key_for_vision_tool(MODEL)
+                    )
                 )
             ],
             verbose=True
@@ -77,10 +77,10 @@ class RiskAssessmentCrew():
             config=self.agents_config['risk_assessment_expert'],
             tools=[
                 PDFSearchTool(
-                    pdf=i, 
-                    config={
-                        api_key: set_openai_api_key_for_vision_tool(MODEL)
-                    }
+                    pdf=i,
+                    config=dict(
+                        api_key=set_openai_api_key_for_vision_tool(MODEL)
+                    )
                 )
                 for i in [
                     위험성평가_이행점검_매뉴얼, 
@@ -111,10 +111,10 @@ class RiskAssessmentCrew():
             config=self.agents_config['risk_reduction_expert'],
             tools=[
                 PDFSearchTool(
-                    pdf=i, 
-                    config={
-                        api_key: set_openai_api_key_for_vision_tool(MODEL)
-                    }
+                    pdf=i,
+                    config=dict(
+                        api_key=set_openai_api_key_for_vision_tool(MODEL)
+                    )
                 )
                 for i in [
                     위험성평가_이행점검_매뉴얼, 
