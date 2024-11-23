@@ -146,7 +146,7 @@ def select_model(select_model: str, api_key: str = None) -> None:
 
         # 4. Prompt user for a new API key
         entered_api_key = st.sidebar.text_input(
-            f"{company_name} API 키를 입력하세요:", value="", type="password"
+            f"{get_company_name(select_model)} API 키를 입력하세요:", value="", type="password"
         )
         if entered_api_key:
             st.session_state["API_KEY_REGISTRY"][env_key_name] = entered_api_key
