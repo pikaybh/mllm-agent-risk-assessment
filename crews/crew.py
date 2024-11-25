@@ -1,8 +1,6 @@
 # crews/crew.py
 import os
 
-import streamlit as st
-
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from crewai_tools import PDFSearchTool, VisionTool
@@ -16,7 +14,6 @@ from utils.crews import set_openai_api_key_for_crewtools
 
 MODEL="gpt-4o"
 
-st.success(set_openai_api_key_for_crewtools(MODEL))
 
 @CrewBase
 class RiskAssessmentCrew():
