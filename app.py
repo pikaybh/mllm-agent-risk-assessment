@@ -69,5 +69,5 @@ if st.sidebar.button("위험성 평가표 작성하기"):
     st.markdown("### 펼쳐서 Agent 생각 보기 👇")
     st.json(result.tasks_output, expanded=False)
     st.markdown("### 펼쳐서 Raw 데이터 보기 👇")
-    st.write(result, expanded=False)
+    st.json(result, expanded=False)
     st.success("위험성 평가표 작성이 완료되었습니다.")
