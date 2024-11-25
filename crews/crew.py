@@ -77,11 +77,11 @@ class RiskAssessmentCrew():
             tools=[
                 PDFSearchTool(
                     pdf=i,
-                    llm={
-                        "config": {
-                            "api_key": set_openai_api_key_for_crewtools(MODEL)
-                        }
-                    }
+                    llm=dict(
+                        config=dict(
+                            api_key=set_openai_api_key_for_crewtools(MODEL)
+                        )
+                    )
                 )
                 for i in [
                     위험성평가_이행점검_매뉴얼, 
@@ -113,11 +113,11 @@ class RiskAssessmentCrew():
             tools=[
                 PDFSearchTool(
                     pdf=i,
-                    llm={
-                        "config": {
-                            "api_key": set_openai_api_key_for_crewtools(MODEL)
-                        }
-                    }
+                    llm=dict(
+                        config=dict(
+                            api_key=set_openai_api_key_for_crewtools(MODEL)
+                        )
+                    )
                 )
                 for i in [
                     위험성평가_이행점검_매뉴얼, 
