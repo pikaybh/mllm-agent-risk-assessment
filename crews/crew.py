@@ -15,6 +15,21 @@ from utils.crews import set_openai_api_key_for_crewtools
 MODEL="gpt-4o"
 
 
+class OpenAIKeyWrapper:
+    def __enter__(self):
+        # 환경 변수 설정
+        self.original_key = os.environ.get("OPENAI_API_KEY", None)
+        os.environ["OPENAI_API_KEY"] = set_openai_api_key_for_crewtools(MODEL)
+    
+    def __exit__(self, exc_type, exc_value, traceback):
+        # 원래 키 복원
+        if self.original_key is not None:
+            os.environ["OPENAI_API_KEY"] = self.original_key
+        else:
+            del os.environ["OPENAI_API_KEY"]
+
+
+
 @CrewBase
 class RiskAssessmentCrew():
     """
@@ -77,11 +92,11 @@ class RiskAssessmentCrew():
             tools=[
                 PDFSearchTool(
                     pdf=i,
-                    llm=dict(
-                        config=dict(
-                            api_key=set_openai_api_key_for_crewtools(MODEL)
-                        )
-                    )
+                    llm={
+                        "config": {
+                            "api_key": set_openai_api_key_for_crewtools(MODEL)
+                        }
+                    }
                 )
                 for i in [
                     위험성평가_이행점검_매뉴얼, 
@@ -113,11 +128,11 @@ class RiskAssessmentCrew():
             tools=[
                 PDFSearchTool(
                     pdf=i,
-                    llm=dict(
-                        config=dict(
-                            api_key=set_openai_api_key_for_crewtools(MODEL)
-                        )
-                    )
+                    llm={
+                        "config": {
+                            "api_key": set_openai_api_key_for_crewtools(MODEL)
+                        }
+                    }
                 )
                 for i in [
                     위험성평가_이행점검_매뉴얼, 
@@ -214,7 +229,10 @@ def run_crew(model, image, tasks):
     Returns:
         Output from the kickoff process of the RiskAssessmentCrew.
     """
-    return RiskAssessmentCrew().crew(model).kickoff(inputs={
-        'image': image,
-        'tasks': tasks
-    })
+    with OpenAIKeyWrapper():
+        return RiskAssessmentCrew().crew(model).kickoff(
+            inputs={
+                'image': image,
+                'tasks': tasks
+            }
+        )
