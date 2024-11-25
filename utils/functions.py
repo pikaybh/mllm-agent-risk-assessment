@@ -303,3 +303,35 @@ def transform_to_json_format_debug_fixed(raw_text):
         json_output.append(current_entry)
 
     return json_output
+
+
+def dict_to_markdown_table(data_dict: dict) -> str:
+    # Markdown 표 형식으로 변환
+    keys = list(data_dict.keys())
+    values = list(data_dict.values())
+    
+    # Markdown 표 생성
+    markdown = (
+        f"\n| {' | '.join(keys)} |\n"
+        f"|{'--|' * len(keys)}\n"
+        f"| {' | '.join(values)} |\n"
+    )
+
+    return markdown
+
+
+def get_tasks_into_chart(data: str) -> str:
+    if ':' in data:
+            # 콜론을 기준으로 키-값 쌍 생성
+        key_value_pairs = [pair.strip() for pair in data.split(",")]
+        result_dict = {}
+
+        for pair in key_value_pairs:
+            if ":" in pair:
+                key, value = map(str.strip, pair.split(":", 1))
+                result_dict[key] = value
+
+        return dict_to_markdown_table(result_dict)
+
+    else:
+        return data

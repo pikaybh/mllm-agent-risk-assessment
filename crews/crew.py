@@ -5,14 +5,13 @@ from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from crewai_tools import PDFSearchTool, VisionTool
 
-# from crews.tools.vision_tool import VisionTool
-# from crews.tools.pdf_search_tool import PDFSearchTool
-from utils.crews import set_openai_api_key_for_vision_tool
+from utils.crews import set_openai_api_key_for_crewtools
 
 
 위험성평가_이행점검_매뉴얼 = "src/pdfs/붙임1._2022_위험성평가_이행점검_매뉴얼.pdf"
 위험성평가에_관한_지침 = "src/pdfs/사업장 위험성평가에 관한 지침(고용노동부고시)(제2023-19호)(20230522).pdf"
 산업안전보건기준에_관한_규칙 = "src/pdfs/산업안전보건기준에 관한 규칙(고용노동부령)(제00417호)(20240628).pdf"
+
 MODEL="gpt-4o"
 
 
@@ -50,7 +49,7 @@ class RiskAssessmentCrew():
             tools=[
                 VisionTool(
                     config={
-                        "api_key": set_openai_api_key_for_vision_tool(MODEL)
+                        "api_key": set_openai_api_key_for_crewtools(MODEL)
                     }
                 )
             ],
@@ -78,8 +77,10 @@ class RiskAssessmentCrew():
             tools=[
                 PDFSearchTool(
                     pdf=i,
-                    config={
-                        "api_key": set_openai_api_key_for_vision_tool(MODEL)
+                    llm={
+                        "config": {
+                            "api_key": set_openai_api_key_for_crewtools(MODEL)
+                        }
                     }
                 )
                 for i in [
@@ -112,8 +113,10 @@ class RiskAssessmentCrew():
             tools=[
                 PDFSearchTool(
                     pdf=i,
-                    config={
-                        "api_key": set_openai_api_key_for_vision_tool(MODEL)
+                    llm={
+                        "config": {
+                            "api_key": set_openai_api_key_for_crewtools(MODEL)
+                        }
                     }
                 )
                 for i in [

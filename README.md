@@ -5,8 +5,8 @@ Powered by multimodal [LLM agents](https://www.crewai.com/).
 
 ## Credits
 
-- Byunghee Yoo ([@pikaybh](https://github.com/pikaybh))
-- Sungwon Ahn
+- Byunghee Yoo ([@pikaybh](https://github.com/pikaybh)): [pikaybh@snu.ac.kr](mailto:pikaybh@snu.ac.kr)
+- Sungwon Ahn: [sungwonahn@snu.ac.kr](mailto:sungwonahn@snu.ac.kr)
 
 ## License
 
