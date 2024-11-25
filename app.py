@@ -47,16 +47,13 @@ if st.sidebar.button("위험성 평가표 작성하기"):
     logger.debug(f"Running in progress. Task: {task}")
     with st.spinner("위험성 평가표를 생성 중, 잠시만 기다려주세요. (예상 소요 시간: 1~3분)"):
         # Run crews
-        """
         try:
             result = run_crew(get_model(selected_model, api_key=api_key), image_path, task)
         except Exception as e:
             st.error(f"작업 처리 중 오류 발생: {e}")
             logger.error(f"Error: {e}")
             st.stop()
-        """
-        result = run_crew(get_model(selected_model, api_key=api_key), image_path, task)
-
+        
         # 결과 처리
         try:
             st.markdown(f"### [평가대상작업] {get_tasks_into_chart(task)}")
@@ -68,8 +65,9 @@ if st.sidebar.button("위험성 평가표 작성하기"):
             logger.error(e)
             st.stop()
 
-    st.markdown(f"<details><summary><h3>펼쳐서 Agent 생각 보기 👇</h3></summary>{"\n".join(result.tasks_output)}</details>", unsafe_allow_html=True)
+    # st.markdown(f"<details><summary><h3>펼쳐서 Agent 생각 보기 👇</h3></summary>{"\n".join(result.tasks_output)}</details>", unsafe_allow_html=True)
+    st.markdown("### 펼쳐서 Agent 생각 보기 👇")
     st.json(result.tasks_output, expanded=False)
     st.markdown("### 펼쳐서 Raw 데이터 보기 👇")
-    st.json(result, expanded=False)
+    st.write(result, expanded=False)
     st.success("위험성 평가표 작성이 완료되었습니다.")
