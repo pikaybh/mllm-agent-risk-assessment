@@ -29,7 +29,7 @@ page_config("위험성평가 자동 생성 LLM")
 login()
 
 from utils.crews import set_openai_api_key_for_crewtools
-st.success(set_openai_api_key_for_crewtools(MODEL))
+st.success(set_openai_api_key_for_crewtools("gpt-4o"))
 
 # Sidebar: Model Selection
 st.sidebar.subheader("모델 선택")
